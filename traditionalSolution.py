@@ -11,12 +11,12 @@ def reduce_memory(df):
         df[col] = df[col].astype('int32')
     return df
 
-df_games = reduce_memory(pd.read_csv("games.csv"))
+df_games = reduce_memory(pd.read_csv("../PythonProject/games.csv"))
 df_games["date_release"] = df_games["date_release"].astype(str).str[:4].astype(int)
 df_games.rename(columns={"date_release": "year_release"}, inplace=True)
 df_games.drop(["win", "mac", "linux", "steam_deck"], axis=1, inplace=True)
 
-file_path = "recommendations.csv"
+file_path = "../PythonProject/recommendations.csv"
 chunksize = 10000
 chunks = []
 
@@ -25,8 +25,8 @@ for chunk in pd.read_csv(file_path, chunksize=chunksize):
     chunks.append(chunk)
 
 df_recs = pd.concat(chunks, ignore_index=False)
-df_users = reduce_memory(pd.read_csv("users.csv"))
-meta_data = reduce_memory(pd.read_json("games_metadata.json"))
+df_users = reduce_memory(pd.read_csv("../PythonProject/users.csv"))
+meta_data = reduce_memory(pd.read_json("../PythonProject/games_metadata.json"))
 meta_data["tags"] = meta_data["tags"].apply(lambda x: ", ".join(x) if isinstance(x, list) else x)
 
 
